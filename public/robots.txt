@@ -1,0 +1,7 @@
+# Dr. Uzzal Chandra Tangchangya — portfolio
+# https://druzzal.com
+
+User-agent: *
+Allow: /
+
+Sitemap: https://druzzal.com/sitemap.xml

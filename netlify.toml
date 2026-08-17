@@ -1,0 +1,13 @@
+# Netlify build settings for druzzal.com
+#
+# This is a static site: there is nothing to compile, so there is no build
+# command. Everything Netlify serves lives in public/ and nothing else in this
+# repository is ever uploaded.
+#
+# Response headers and pretty-URL rewrites are deliberately NOT defined here.
+# They live in public/_headers and public/_redirects so that they apply
+# identically whether the site is deployed from Git or dragged into the
+# Netlify UI as a folder. Keeping one copy avoids the two drifting apart.
+
+[build]
+  publish = "public"

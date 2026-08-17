@@ -1,0 +1,15 @@
+# Tidy URLs: /about serves about.html as a rewrite (status 200). Since v15 the
+# extensionless form is the canonical one -- rel=canonical, og:url, the JSON-LD
+# @id/url pairs, the sitemap and every internal link all use /about, so the two
+# URLs are consolidated on the pretty form. The .html paths still resolve for
+# old inbound links; do not add a forced 301 from .html -> pretty without
+# testing it on a deploy preview first (rewrite + forced redirect can loop).
+/about           /about.html            200
+/skills          /skills.html           200
+/experience      /experience.html       200
+/research        /research.html         200
+/projects        /projects.html         200
+/certifications  /certifications.html   200
+/community       /community.html        200
+/contact         /contact.html          200
+/contact-success /contact-success.html  200

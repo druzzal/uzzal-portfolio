@@ -1,0 +1,84 @@
+# ---------------------------------------------------------------- security
+# Applied to every response. None of these change how the site renders.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), xr-spatial-tracking=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  # Scoped to exactly what this site loads and the inline theme script in each <head>. Forms post to this origin only, which is what Netlify Forms needs.
+  #
+  # style-src deliberately has no 'unsafe-inline'. Every page carries exactly
+  # one external stylesheet and not a single style="" attribute, so there is
+  # nothing inline left to allow. The one script that would otherwise write a
+  # style attribute (the line-stagger in animations.js) sets the custom
+  # property through the CSSOM instead, which CSP does not gate.
+  #
+  # Inline scripts are allowlisted by SHA-256 hashes below instead of using
+  # 'unsafe-inline'. This preserves the no-flash theme resolver and JSON-LD
+  # while keeping script execution restricted to trusted content. If an inline
+  # script changes, regenerate its hash before deployment.
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; media-src 'none'; script-src 'self' 'sha256-rz6x0OGGOX41XQK8Nk6aPGB0+tlQQQCBCcjPzn/fR/8=' 'sha256-0qRUZr2ATbJGEzZhc856Y4mLdfjtrKkgBH8GsBD1tao=' 'sha256-13SNcNq72S2dV4TmEPUu8zj4ClMbppq21rMWMABXDL4=' 'sha256-1H6pFmFi6AiViW8Oz369c+50/SNK5gCIY6i9zjTQRDs=' 'sha256-AtOoOAdgt0W0bV6A6DfJH7u29zeeewJg1eoL8RHXRrA=' 'sha256-CH9NgTVg1OeAeQMSEO9aPa85/R6iFuCQly6O2SGcHxA=' 'sha256-FdPGlRL9Tx/D5PhBsxqPKWqf7QiFxvi+xuWMHFGCDDQ=' 'sha256-c2rDl63WLWd3j5deh1KekvV3VQkNYJRnCYKf6Avm2vY=' 'sha256-c5QsRPeXE79T6Kg1qartuXhdLp6PEfR9nh2TC/0hi9c=' 'sha256-ehuQDN7r4ylPE0zNowcCPgTZPwpv/XJOgDx0RD+TdL4=' 'sha256-J63o+CB0ZkFG4enYj0jK2eNY+y/rkFhiUkDuF1z+sSM='; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests
+
+# ------------------------------------------------------------------ caching
+# Images and the CV are content-stable, so they cache hard. The CSS and JS are
+# NOT fingerprinted, so they must revalidate or a redeploy would never reach
+# anyone holding a cached copy.
+/assets/images/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/documents/*
+  Cache-Control: public, max-age=604800
+
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/css/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/assets/js/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# The extensionless pretty URLs in _redirects are rewrites, so a request for
+# /about never matches /*.html above. Netlify's default for HTML happens to be
+# the same policy, but stating it here means the rule is asserted rather than
+# inherited, and it stays correct if that default ever changes.
+/
+  Cache-Control: public, max-age=0, must-revalidate
+/about
+  Cache-Control: public, max-age=0, must-revalidate
+/skills
+  Cache-Control: public, max-age=0, must-revalidate
+/experience
+  Cache-Control: public, max-age=0, must-revalidate
+/research
+  Cache-Control: public, max-age=0, must-revalidate
+/projects
+  Cache-Control: public, max-age=0, must-revalidate
+/certifications
+  Cache-Control: public, max-age=0, must-revalidate
+/community
+  Cache-Control: public, max-age=0, must-revalidate
+/contact
+  Cache-Control: public, max-age=0, must-revalidate
+/contact-success
+  Cache-Control: public, max-age=0, must-revalidate
+
+/sitemap.xml
+  Cache-Control: public, max-age=3600
+
+/robots.txt
+  Cache-Control: public, max-age=3600
+
+# The root .ico is the authoritative favicon URL used by every page, so it must
+# revalidate after a logo change instead of being held indefinitely in cache.
+/favicon.ico
+  Cache-Control: public, max-age=0, must-revalidate
+
+/site.webmanifest
+  Cache-Control: public, max-age=86400

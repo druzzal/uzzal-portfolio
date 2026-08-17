@@ -1,0 +1,41 @@
+Self-hosted webfonts for druzzal.com
+====================================
+
+The WOFF2 files in this directory are latin subsets of three typefaces, all
+released under the SIL Open Font License, Version 1.1. Self-hosting and
+redistribution are permitted under that licence; this notice accompanies the
+files as the licence requires.
+
+  fraunces-variable.woff2
+  fraunces-variable-italic.woff2
+      Fraunces
+      Copyright 2020 The Fraunces Project Authors
+      https://github.com/undercasetype/Fraunces
+      Variable: optical size (opsz 9-144). Weight instanced at 400.
+
+  inter-variable.woff2
+      Inter
+      Copyright The Inter Project Authors
+      https://github.com/rsms/inter
+      Variable: weight (wght 350-500).
+
+  jetbrains-mono-variable.woff2
+      JetBrains Mono
+      Copyright The JetBrains Mono Project Authors
+      https://github.com/JetBrains/JetBrainsMono
+      Variable: weight (wght 400-500).
+
+Full licence text: https://openfontlicense.org/
+
+Provenance
+----------
+These are the same binaries the site previously loaded from
+fonts.gstatic.com, fetched by tools/fetch-fonts.py using the identical css2
+request the pages used to make. Keeping the source identical is deliberate: a
+different build of Fraunces (for example one that still exposes the SOFT and
+WONK axes) would render the headings slightly differently from production.
+
+Do not overwrite a file in place. /assets/fonts/* is served with a one-year
+immutable cache, exactly like /assets/images/*, so a replacement face needs a
+new filename and a matching update to the @font-face src in
+/assets/css/main.css and to the preload links in every page head.

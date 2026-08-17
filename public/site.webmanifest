@@ -1,0 +1,19 @@
+{
+  "id": "/",
+  "name": "Dr. Uzzal Chandra Tangchangya — Physician & Public Health Professional",
+  "short_name": "Dr. Uzzal C. T.",
+  "description": "Portfolio of Dr. Uzzal Chandra Tangchangya, physician and public-health professional, Dhaka, Bangladesh.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "lang": "en",
+  "dir": "ltr",
+  "background_color": "#F7F4EC",
+  "theme_color": "#F7F4EC",
+  "icons": [
+    { "src": "/assets/images/favicon-v3-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/images/favicon-v3-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/images/favicon-maskable-v3-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
