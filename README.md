@@ -28,7 +28,10 @@ The web manifest references the 192px, 512px and 512px maskable v3 PNGs. `/favic
 ```
 netlify.toml        Netlify build settings (publish = "public")
 CHANGELOG.md        What changed in each revision, and what was deliberately left alone
-.gitignore
+.gitignore          OS/editor debris and secrets -- see note below
+tools/              Pre-deploy checks. Never deployed; run them by hand.
+  verify-fonts.py   Fonts are self-hosted and no Google Fonts URL crept back in
+  verify-csp.py     Every inline script still matches its CSP hash
 public/             Everything that gets served. Nothing outside it is deployed.
   *.html            10 pages + a 404
   _headers          Security headers, CSP, cache policy
@@ -59,6 +62,24 @@ Do **not** add a forced 301 from `/about.html` to `/about` without testing it
 on a deploy preview first — a forced redirect combined with the existing
 rewrite can loop. The contact form's `action` deliberately stays
 `/contact-success.html`; leave it alone.
+
+## Before every deploy
+
+Two checks, both instant, both exit non-zero on failure:
+
+```bash
+python3 tools/verify-fonts.py
+python3 tools/verify-csp.py
+```
+
+`verify-csp.py` is the one that catches a silent breakage. Inline scripts — the
+no-flash theme resolver and each page's JSON-LD — are permitted by SHA-256 hash
+rather than `'unsafe-inline'`, so **changing a single character inside one of
+those blocks changes its hash and the browser stops running it.** The deploy
+still succeeds and the page still looks right to whoever made the edit; what
+actually happens is a flash of the wrong colour scheme, or structured data
+vanishing from Google's view. Run the check, and if it fails, paste the hash it
+prints into the `script-src` allowlist in `public/_headers`.
 
 ## Deploying from GitHub
 
