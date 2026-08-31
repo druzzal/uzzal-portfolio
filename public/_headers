@@ -20,7 +20,7 @@
   # 'unsafe-inline'. This preserves the no-flash theme resolver and JSON-LD
   # while keeping script execution restricted to trusted content. If an inline
   # script changes, regenerate its hash before deployment.
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; media-src 'none'; script-src 'self' 'sha256-rz6x0OGGOX41XQK8Nk6aPGB0+tlQQQCBCcjPzn/fR/8=' 'sha256-0qRUZr2ATbJGEzZhc856Y4mLdfjtrKkgBH8GsBD1tao=' 'sha256-13SNcNq72S2dV4TmEPUu8zj4ClMbppq21rMWMABXDL4=' 'sha256-1H6pFmFi6AiViW8Oz369c+50/SNK5gCIY6i9zjTQRDs=' 'sha256-AtOoOAdgt0W0bV6A6DfJH7u29zeeewJg1eoL8RHXRrA=' 'sha256-CH9NgTVg1OeAeQMSEO9aPa85/R6iFuCQly6O2SGcHxA=' 'sha256-FdPGlRL9Tx/D5PhBsxqPKWqf7QiFxvi+xuWMHFGCDDQ=' 'sha256-c2rDl63WLWd3j5deh1KekvV3VQkNYJRnCYKf6Avm2vY=' 'sha256-c5QsRPeXE79T6Kg1qartuXhdLp6PEfR9nh2TC/0hi9c=' 'sha256-ehuQDN7r4ylPE0zNowcCPgTZPwpv/XJOgDx0RD+TdL4=' 'sha256-J63o+CB0ZkFG4enYj0jK2eNY+y/rkFhiUkDuF1z+sSM='; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; media-src 'none'; script-src 'self' 'sha256-rz6x0OGGOX41XQK8Nk6aPGB0+tlQQQCBCcjPzn/fR/8=' 'sha256-0qRUZr2ATbJGEzZhc856Y4mLdfjtrKkgBH8GsBD1tao=' 'sha256-13SNcNq72S2dV4TmEPUu8zj4ClMbppq21rMWMABXDL4=' 'sha256-1H6pFmFi6AiViW8Oz369c+50/SNK5gCIY6i9zjTQRDs=' 'sha256-AtOoOAdgt0W0bV6A6DfJH7u29zeeewJg1eoL8RHXRrA=' 'sha256-CH9NgTVg1OeAeQMSEO9aPa85/R6iFuCQly6O2SGcHxA=' 'sha256-FdPGlRL9Tx/D5PhBsxqPKWqf7QiFxvi+xuWMHFGCDDQ=' 'sha256-c2rDl63WLWd3j5deh1KekvV3VQkNYJRnCYKf6Avm2vY=' 'sha256-c5QsRPeXE79T6Kg1qartuXhdLp6PEfR9nh2TC/0hi9c=' 'sha256-ehuQDN7r4ylPE0zNowcCPgTZPwpv/XJOgDx0RD+TdL4=' 'sha256-J63o+CB0ZkFG4enYj0jK2eNY+y/rkFhiUkDuF1z+sSM=' 'sha256-DmasreZKw7HyU46b3+ZBd9FbGFEN2Kj1o3IiM44I9GA=' 'sha256-KgLR6wrW/+Whr0jqXcp3pkpeSdgCRL/DXef+czzThVY='; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests
 
 # ------------------------------------------------------------------ caching
 # Images and the CV are content-stable, so they cache hard. The CSS and JS are
@@ -67,6 +67,10 @@
 /contact
   Cache-Control: public, max-age=0, must-revalidate
 /contact-success
+  Cache-Control: public, max-age=0, must-revalidate
+/consultation
+  Cache-Control: public, max-age=0, must-revalidate
+/consultation-success
   Cache-Control: public, max-age=0, must-revalidate
 
 /sitemap.xml

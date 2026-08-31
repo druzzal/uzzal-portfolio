@@ -1,3 +1,25 @@
+## v19 — online consultation booking — 31 August 2026
+
+**New feature, purely additive.** Nothing in the existing design, copy, imagery or animation changed. Two new pages, one new section on `contact.html`, and a nav/footer entry on every page.
+
+- **`public/consultation.html`** — an online consultation request form. Netlify Form named `consultation`, with the same honeypot and hidden `form-name` pattern as the contact form, posting to `/consultation-success.html`. Fields: `name`, `email`, `phone`, `consultation_type` (video or phone), `preferred_date`, `preferred_time`, `details`, and a required `consent` checkbox. Generated from `contact.html` so the nav, footer, head plumbing and inline theme script stay byte-identical to every other page.
+- **`public/consultation-success.html`** — noindex confirmation page, cloned from `contact-success.html`.
+- **Teaser on `contact.html`** — a `section--tint` block routing patients to `/consultation`, leaving the contact form for collaboration, research, employment and press.
+- **Wired across all 13 pages** — desktop nav link, mobile menu entry (Consultation is 05, Contact renumbered to 06), footer link. The pager chain is now community → consultation → contact. `_redirects` rewrites and `_headers` cache rules added for both pretty URLs; `/consultation` added to the sitemap, `/consultation-success` deliberately left out because it is noindex.
+- **Two new SHA-256 entries in the CSP `script-src` allowlist**, one for each new page's JSON-LD. `tools/verify-csp.py` caught their absence before deploy, which is exactly what it exists for.
+- **`assets/js/main.js`** — the form module is no longer pinned to the contact page. It finds the form via `[data-ajax-form]` (falling back to `#contact-form`), reads its button label and status/error copy from `data-busy-label` / `data-sending-msg` / `data-error-msg`, validates checkboxes on `.checked` rather than `.value`, and toggles the placeholder class on every `select` instead of only `reason`. The diff is confined to that one block; the animation pipeline is untouched.
+- **`assets/css/main.css`** — one appended chunk: `.field--check` consent-checkbox styling, and an invert filter on `::-webkit-calendar-picker-indicator`. The native date-picker icon is dark artwork and this form always sits on the dark band, so without the invert it is invisible.
+
+**Deliberately NOT changed.** No third-party script was added and the CSP was not relaxed — `style-src`, `connect-src`, `frame-src` and `form-action` are all as they were. Consultation length and available hours are stated nowhere, because they were not supplied; do not invent them.
+
+**The fee is written "500 BDT", never with the taka sign.** U+09F3 sits outside the Latin unicode-range of the self-hosted woff2 files and would fall back to a system font mid-sentence.
+
+**Also this round:** the vertical `Portrait · Dhaka 2024` rail beside the About portrait was removed from `about.html`. The `.about-rail` markup was `aria-hidden`, so nothing changed for screen readers, and the CSS rules stay in place because `index.html` still uses the same component for its own `Dhaka · Bangladesh` rail. No date bump — this is a decorative caption, not page content, matching how the v18.4 footer fix was handled.
+
+**CV replaced.** `public/assets/documents/Dr-Uzzal-Chandra-Tangchangya-CV.pdf` is a new build: referees replaced with "Available upon request", the summary rebalanced across clinical, humanitarian and digital health work, role-specific framing removed, tense and spelling made consistent with the site (British forms, "15,000+", "Medical Center", MPH in Epidemiology). Same filename, so every existing link and the `download` attribute still work. `/assets/documents/*` is `max-age=604800`, not immutable — a returning visitor may be served the old copy for up to a week.
+
+**bKash payment is not integrated.** The page says the 500 BDT fee is payable once a time is confirmed, which is accurate for the current setup. bKash PGW needs an approved merchant account and a server side — see README.
+
 ## v18.4.1 — repository hygiene — 18 August 2026
 
 **Repository-level only. `public/` is byte-identical to v18.4** — no HTML, CSS, JavaScript, image, font, header, redirect, sitemap, manifest or robots change, so this alters nothing that gets served. It closes the gaps that only matter once the site is deployed from Git rather than dragged into the Netlify UI.

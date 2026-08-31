@@ -141,3 +141,19 @@ custom cursor and the page-transition veil are removed, and the photo strips
 turn into normal horizontally scrollable regions. With JavaScript disabled
 entirely, all content renders — the reveal start states are scoped behind a
 `js` class set by an inline script in each `<head>`.
+
+## Online consultation
+
+`/consultation` collects appointment requests through a second Netlify Form named `consultation`. It shares the form module in `assets/js/main.js` with the contact form: both are found by the `data-ajax-form` attribute, and each supplies its own button label and status copy through `data-busy-label`, `data-sending-msg` and `data-error-msg`.
+
+After the first deploy, **confirm the form appears in Netlify's Forms tab**. Netlify detects forms at build time, so one that has never been through a build silently accepts nothing.
+
+Write the fee as "500 BDT". Never use the taka sign — U+09F3 is outside the Latin unicode-range of the self-hosted fonts and would render in a fallback face.
+
+### bKash payment — not integrated
+
+The fee is currently collected out of band, once a time is confirmed by email. To take payment on the site instead, bKash PGW needs three things this repo does not have:
+
+1. **An approved bKash *merchant* account.** The PGW credentials (`app_key`, `app_secret`, `username`, `password`) are issued only to approved merchants. A personal or agent account cannot use the API, and collecting to a personal number is against bKash's terms of service.
+2. **A server side.** Those credentials are secrets and cannot live in client-side JavaScript, so the grant-token → create-payment → execute-payment calls need Netlify Functions. That turns this repo from a plain static publish into one with a functions directory.
+3. **CSP changes** in `public/_headers` — `connect-src` for the API and `frame-src` for the hosted checkout, both currently locked down to `'self'` and `'none'`.

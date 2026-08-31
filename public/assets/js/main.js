@@ -357,13 +357,18 @@ if (n) { e.preventDefault(); n.focus(); select(n); }
 });
 });
 }
-var form   = $('#contact-form');
+var form   = $('[data-ajax-form]') || $('#contact-form');
 var submit = $('#cf-submit');
 if (form && submit) {
 var status = $('#form-status');
 var done   = $('#form-done');
 var again  = $('#cf-again');
 var label  = $('.btn-label', submit);
+var labelIdle = label ? label.textContent : '';
+var labelBusy = form.getAttribute('data-busy-label') || 'Sending';
+var sendingMsg = form.getAttribute('data-sending-msg') || 'Sending your message\u2026';
+var errorMsg = form.getAttribute('data-error-msg') ||
+'That did not send. Your message is still here \u2014 please try again, or email dr.uzzaltang@gmail.com directly.';
 var canAjax = typeof window.fetch === 'function' &&
 typeof window.FormData === 'function' &&
 typeof window.URLSearchParams === 'function';
@@ -377,7 +382,13 @@ name:    { msg: 'Please tell me your name.' },
 email:   { msg: 'Please add your email address.',
 bad: 'That email address does not look right.' },
 reason:  { msg: 'Please choose a reason for contact.' },
-message: { msg: 'Please write a message.' }
+message: { msg: 'Please write a message.' },
+phone:   { msg: 'Please add a phone or WhatsApp number.' },
+consultation_type: { msg: 'Please choose video or phone.' },
+preferred_date:    { msg: 'Please choose a preferred date.' },
+preferred_time:    { msg: 'Please choose a preferred time.' },
+details: { msg: 'Please say briefly what you would like to discuss.' },
+consent: { msg: 'Please confirm this before sending.' }
 };
 function fieldOf(el) { return el.closest('[data-field]'); }
 function setError(el, message) {
@@ -397,18 +408,23 @@ if (out) out.textContent = '';
 function validate(el) {
 var rule = RULES[el.name];
 if (!rule) return true;                       // optional field
+if (el.type === 'checkbox') {
+if (!el.checked) { setError(el, rule.msg); return false; }
+setError(el, '');
+return true;
+}
 var v = (el.value || '').trim();
 if (!v) { setError(el, rule.msg); return false; }
 if (el.name === 'email' && !EMAIL_RE.test(v)) { setError(el, rule.bad); return false; }
 setError(el, '');
 return true;
 }
-var reason = form.elements.reason;
-if (reason) {
-reason.addEventListener('change', function () {
-reason.classList.toggle('is-placeholder', !reason.value);
+var selects = $$('select', form);
+selects.forEach(function (sel) {
+sel.addEventListener('change', function () {
+sel.classList.toggle('is-placeholder', !sel.value);
 });
-}
+});
 Object.keys(RULES).forEach(function (n) {
 var el = form.elements[n];
 if (!el) return;
@@ -424,7 +440,7 @@ function setLoading(on) {
 submit.disabled = on;
 submit.classList.toggle('is-loading', on);
 form.setAttribute('aria-busy', on ? 'true' : 'false');
-if (label) label.textContent = on ? 'Sending' : 'Send message';
+if (label) label.textContent = on ? labelBusy : labelIdle;
 }
 function say(message, isError) {
 if (!status) return;
@@ -449,7 +465,7 @@ firstBad.focus();
 return;
 }
 setLoading(true);
-say('Sending your message\u2026');
+say(sendingMsg);
 /* Netlify Forms accepts URL-encoded bodies only, and needs form-name in the
    payload. FormData already picks up the hidden field; re-assert it so a
    stripped or renamed hidden input can never produce an unrecorded POST. */
@@ -474,7 +490,7 @@ sent = true;
 setLoading(false);
 say('');
 form.reset();
-if (reason) reason.classList.add('is-placeholder');
+selects.forEach(function (sel) { sel.classList.add('is-placeholder'); });
 if (done) {
 form.style.display = 'none';
 done.classList.add('is-on');
@@ -486,7 +502,7 @@ say('Thank you — your message is on its way.');
 .catch(function (err) {
 setLoading(false);
 if (window.console && console.warn) console.warn('Contact form submission failed:', err && err.message);
-say('That did not send. Your message is still here — please try again, or email dr.uzzaltang@gmail.com directly.', true);
+say(errorMsg, true);
 });
 });
 if (again && done) {
