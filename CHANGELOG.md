@@ -1,3 +1,12 @@
+## v20 — appointment CTA moved from nav to hero — 31 August 2026
+
+**Two small, surgical edits. No CSS/JS/image/font/header change; `main.css`/`main.js`/`animations.js` byte-identical to v19.**
+
+- **`public/index.html` hero.** The secondary hero button (next to "Explore the work") no longer downloads the CV — it now reads **"Book an appointment"** and links to `/consultation`. The `download` attribute is gone since the button no longer serves a file. This is the only page with a `hero-ctas` block, so it's the only page touched here.
+- **"Consultation" removed from the nav bar on all 13 pages** — both the desktop `.nav-links` entry and the mobile `.menu-list` entry. The mobile menu's numbered items were renumbered so Contact is now `05` (was `06`); Home/About/Work/Impact keep `01`–`04`.
+- **Deliberately left alone, still reachable:** `/consultation` and `/consultation-success` still exist, are still in `_redirects`/`_headers`/`sitemap.xml`, and are still linked from the homepage hero (new button), the footer's "Online consultation" link on every page, and the `contact.html` teaser section ("Request a consultation"). Only the top-level nav entry point was removed — this is a navigation change, not a feature removal.
+- `tools/verify-csp.py` and `tools/verify-fonts.py` both pass 0 failures — no inline script content changed, so no CSP hashes needed recomputing.
+
 ## v19 — online consultation booking — 31 August 2026
 
 **New feature, purely additive.** Nothing in the existing design, copy, imagery or animation changed. Two new pages, one new section on `contact.html`, and a nav/footer entry on every page.
