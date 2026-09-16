@@ -1,3 +1,44 @@
+## v21 — first-paint dark chrome, honest lastmod, consultation schema — 17 September 2026
+
+**16 files: all 13 HTML, `assets/js/main.js`, `_headers`, `sitemap.xml`. `main.css` and `animations.js` are byte-identical to v20** — no design, copy, imagery, animation, image, font, redirect, manifest or robots change.
+
+### 1. `theme-color` is now correct at first paint in dark mode
+
+Every page carried one hardcoded `<meta name="theme-color" content="#F7F4EC">` and `main.js` rewrote it to `#101A22` for dark. But `main.js` is `defer`, so a dark-mode visitor got a flash of cream browser chrome before it was corrected. Each page now ships a media-scoped pair instead:
+
+```html
+<meta name="theme-color" content="#F7F4EC" media="(prefers-color-scheme: light)" data-theme-meta="light" />
+<meta name="theme-color" content="#101A22" media="(prefers-color-scheme: dark)" data-theme-meta="dark" />
+```
+
+The browser picks the right one before any script runs — it works with JavaScript disabled entirely.
+
+**`main.js` had to change with it, and the two are now coupled.** The old code did `querySelector('meta[name="theme-color"]')` and overwrote `content`; against a media-scoped pair that would grab whichever meta came first and set a value the browser then ignores, so the manual toggle would silently stop moving the browser chrome. The theme module now selects `meta[data-theme-meta]` and flips each one's `media` attribute to `all` or `not all`, so exactly one ever matches and an explicit choice still beats the OS preference.
+
+**Do not edit either half alone.** Removing `data-theme-meta`, adding a third `theme-color` meta, or restoring a `content` rewrite in `main.js` breaks the toggle. `#101A22` is the `--bg` dark token in `main.css`; if that palette value changes, both metas change with it.
+
+Verified in a real browser across all five cases: light OS, dark OS, both with scripting on and off, manual toggle against the OS preference, and that choice surviving a reload. Exactly one meta matches at any moment.
+
+### 2. Two pages had content changes that never reached `lastmod`
+
+`index.html` was still dated 18 August despite gaining the footer consultation link in v19 and the "Book an appointment" hero button in v20. `contact.html` was still dated 16 August despite gaining the entire consultation teaser section in v19. Both `dateModified` values and both `sitemap.xml` `lastmod` entries are now **2026-08-31**, the date those changes actually shipped — not today's date, since nothing user-visible changed on either page in this round.
+
+The other 11 pages are deliberately **not** bumped. A `theme-color` meta is browser-chrome plumbing, not page content, and overstating `lastmod` devalues the signal — the same reasoning used in v18.
+
+### 3. `consultation.html` describes the service, not just the page
+
+The `@graph` gained a `Service` node (`#service`), referenced from the `WebPage` node as `mainEntity`: provider is the existing `#person`, `areaServed` Bangladesh, an `availableChannel` pointing at the request form with Bengali and English, and an `Offer` of 500 BDT. Every value already appears in the page's visible copy — nothing was invented, and no availability or duration is claimed, because neither has been supplied.
+
+### CSP hashes
+
+The JSON-LD changed on `index.html`, `contact.html` and `consultation.html`, so three `script-src` SHA-256 entries were recomputed and swapped in `_headers`. `tools/verify-csp.py` caught all three before they shipped — which is exactly the failure it exists to prevent — and now reports 0 failures, 25 inline blocks, 13 hashes, no dead entries. `tools/verify-fonts.py` also passes.
+
+### Still open, still needs your input
+
+- **Consultation length is stated nowhere.** The form collects a preferred window, but a patient has no way to know whether 500 BDT buys 15 minutes or 45. Supply a figure and it goes in the info block.
+- **Availability (days/hours) is stated nowhere** for the same reason.
+- **bKash step 02/03 copy is interim.** It accurately describes today's confirm-then-pay flow and will need rewriting when PGW merchant onboarding completes.
+
 ## v20 — appointment CTA moved from nav to hero — 31 August 2026
 
 **Two small, surgical edits. No CSS/JS/image/font/header change; `main.css`/`main.js`/`animations.js` byte-identical to v19.**

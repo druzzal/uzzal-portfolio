@@ -29,7 +29,12 @@
 <meta name="twitter:image" content="https://druzzal.com/assets/images/og-portrait-card.jpg" />
 <meta name="twitter:image:alt" content="Portrait of Dr. Uzzal Chandra Tangchangya, physician, Dhaka, Bangladesh" />
 
-<meta name="theme-color" content="#F7F4EC" />
+<!-- Two media-scoped values, so the browser chrome is already correct at first
+     paint instead of being corrected by the deferred script. main.js flips the
+     media attributes when a theme is chosen explicitly, so the manual toggle
+     still wins over the OS preference. -->
+<meta name="theme-color" content="#F7F4EC" media="(prefers-color-scheme: light)" data-theme-meta="light" />
+<meta name="theme-color" content="#101A22" media="(prefers-color-scheme: dark)" data-theme-meta="dark" />
 
 <!-- shared stylesheet: one cached file for every page -->
 
@@ -182,7 +187,7 @@
       "name": "Dr. Uzzal Chandra Tangchangya | Physician & Public Health Professional",
       "description": "Portfolio of Dr. Uzzal Chandra Tangchangya, a general physician and public-health professional in Dhaka, Bangladesh.",
       "inLanguage": "en",
-      "dateModified": "2026-08-18T00:00:00+06:00",
+      "dateModified": "2026-08-31T00:00:00+06:00",
       "isPartOf": {
         "@id": "https://druzzal.com/#website"
       },

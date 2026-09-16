@@ -29,7 +29,12 @@
 <meta name="twitter:image" content="https://druzzal.com/assets/images/og-portrait-card.jpg" />
 <meta name="twitter:image:alt" content="Portrait of Dr. Uzzal Chandra Tangchangya, physician, Dhaka, Bangladesh" />
 
-<meta name="theme-color" content="#F7F4EC" />
+<!-- Two media-scoped values, so the browser chrome is already correct at first
+     paint instead of being corrected by the deferred script. main.js flips the
+     media attributes when a theme is chosen explicitly, so the manual toggle
+     still wins over the OS preference. -->
+<meta name="theme-color" content="#F7F4EC" media="(prefers-color-scheme: light)" data-theme-meta="light" />
+<meta name="theme-color" content="#101A22" media="(prefers-color-scheme: dark)" data-theme-meta="dark" />
 
 <!-- shared stylesheet: one cached file for every page -->
 
@@ -171,12 +176,52 @@
       "about": {
         "@id": "https://druzzal.com/#person"
       },
+      "mainEntity": {
+        "@id": "https://druzzal.com/consultation#service"
+      },
       "primaryImageOfPage": {
         "@type": "ImageObject",
         "url": "https://druzzal.com/assets/images/og-portrait-card.jpg"
       },
       "breadcrumb": {
         "@id": "https://druzzal.com/consultation#breadcrumb"
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://druzzal.com/consultation#service",
+      "name": "Online medical consultation",
+      "serviceType": "Online medical consultation",
+      "description": "A video or phone consultation with Dr. Uzzal Chandra Tangchangya, requested through a form on this page and confirmed by email.",
+      "provider": {
+        "@id": "https://druzzal.com/#person"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Bangladesh"
+      },
+      "availableChannel": {
+        "@type": "ServiceChannel",
+        "name": "Online consultation request form",
+        "serviceUrl": "https://druzzal.com/consultation",
+        "availableLanguage": [
+          {
+            "@type": "Language",
+            "name": "Bengali",
+            "alternateName": "bn"
+          },
+          {
+            "@type": "Language",
+            "name": "English",
+            "alternateName": "en"
+          }
+        ]
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "500",
+        "priceCurrency": "BDT",
+        "url": "https://druzzal.com/consultation"
       }
     },
     {

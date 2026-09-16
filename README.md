@@ -133,6 +133,22 @@ Images are the exception: `/assets/images/*` is served
 `immutable` for one year, so **replacing an image requires a new filename**.
 Overwriting one in place will not reach anyone who has already visited.
 
+### The `theme-color` metas and `main.js` are coupled
+
+Each `<head>` carries two `theme-color` metas, one scoped to
+`(prefers-color-scheme: light)` and one to `(prefers-color-scheme: dark)`, each
+tagged `data-theme-meta`. The browser resolves the correct one before any
+script runs, which is what keeps the browser chrome from flashing the light
+colour on a dark-mode device.
+
+The theme module in `main.js` selects them by `data-theme-meta` and flips each
+one's `media` attribute between `all` and `not all` so that an explicit choice
+overrides the operating-system preference. **Edit both halves together.** If
+you drop `data-theme-meta`, add a third `theme-color` meta, or put a `content`
+rewrite back into `main.js`, the theme toggle stops moving the browser chrome
+and nothing visible on the page will tell you. `#101A22` is the `--bg` dark
+token in `main.css`; change that palette value and both metas change with it.
+
 ## Accessibility and motion
 
 Every animation is gated behind `prefers-reduced-motion`. With reduced motion

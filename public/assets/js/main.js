@@ -11,7 +11,7 @@ el.textContent = new Date().getFullYear();
 var root = document.documentElement;
 var toggles = $$('[data-theme-toggle]');
 if (!toggles.length) return;
-var meta = document.querySelector('meta[name="theme-color"]');
+var themeMetas = $$('meta[data-theme-meta]');
 var media = window.matchMedia('(prefers-color-scheme: dark)');
 function apply(theme, persist) {
 root.setAttribute('data-theme', theme);
@@ -20,7 +20,9 @@ toggles.forEach(function (t) {
 t.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
 t.setAttribute('aria-pressed', dark ? 'true' : 'false');
 });
-if (meta) meta.setAttribute('content', dark ? '#101A22' : '#F7F4EC');
+themeMetas.forEach(function (m) {
+m.setAttribute('media', m.getAttribute('data-theme-meta') === theme ? 'all' : 'not all');
+});
 if (persist) { try { localStorage.setItem('theme', theme); } catch (e) {} }
 }
 var stored = null;
